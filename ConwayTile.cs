@@ -25,11 +25,11 @@ public class ConwayTile : MonoBehaviour {
 
 	void StartWithRandomTiles(){
 		if (Random.Range (0, 6) == 1) {
-			changeCellState (true);
+			changeTileState (true);
 		}
 	}
 		
-	void changeCellState (bool newState) { 
+	void changeTileState (bool newState) { 
 		if (!isOn && newState) {
 			rend.sharedMaterial = materialOn;
 		} else if(isOn && !newState) {
@@ -58,11 +58,11 @@ public class ConwayTile : MonoBehaviour {
 	void CheckRules(){
 		if (isOn == true) {
 			if (activeNeighbors <= 1 || activeNeighbors >= 4) {
-				changeCellState (false);
+				changeTileState (false);
 			}
 		} else {
 			if (activeNeighbors == 3)
-				changeCellState (true);
+				changeTileState (true);
 		}
 	}
 }
