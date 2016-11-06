@@ -8,4 +8,6 @@ I wanted to create a board that looped infinitely. I also wanted a shape where e
 
 ### Usage
 
-Coming soon. 
+1. Download [conwaysTorus.unitypackage](https://github.com/lancesnider/conways-torus/raw/master/conwaysTorus.unitypackage).
+2. Create a new Unity project. 
+3. Go to `Assets` > `Import Package` > `Custom Package` and select the .unitypackage that you just downloaded. 
