@@ -1,6 +1,6 @@
 # Conway's Torus
 
-
+![conway](https://cloud.githubusercontent.com/assets/3202211/20035539/10965a74-a3ae-11e6-8743-a51082dbe36f.gif)
 
 ### Why a Torus
 
