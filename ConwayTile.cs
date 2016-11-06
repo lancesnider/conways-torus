@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ConwayTile : MonoBehaviour {
 
@@ -9,23 +10,26 @@ public class ConwayTile : MonoBehaviour {
 	private Renderer rend; 
 	private float updateTime = 0.3f;
 	private IEnumerator coroutine;
+	public List<ConwayTile> neighbors = new List<ConwayTile>();
+	private int activeNeighbors;
+	private Collider thisCollider;
 
-	// Use this for initialization
 	void Start (){
+		thisCollider = gameObject.GetComponent<Collider> ();
 		rend = GetComponent<Renderer>();
-		rend.enabled = true;
-		OnOrOff ();
+		StartWithRandomTiles();
+		findNeighbors ();
 		InvokeRepeating("checkAllColliders", 0, updateTime);
+		InvokeRepeating("CheckRules", 0.1f, updateTime);
 	}
-		
 
-	void OnOrOff(){
-		if (Random.Range (0, 16) == 1) {
-			changeCellState (true);
+	void StartWithRandomTiles(){
+		if (Random.Range (0, 6) == 1) {
+			changeTileState (true);
 		}
 	}
-
-	void changeCellState (bool newState) {
+		
+	void changeTileState (bool newState) { 
 		if (!isOn && newState) {
 			rend.sharedMaterial = materialOn;
 		} else if(isOn && !newState) {
@@ -34,30 +38,31 @@ public class ConwayTile : MonoBehaviour {
 		isOn = newState;
 	}
 
-	void checkAllColliders() {
-		gameObject.GetComponent<Collider>().enabled = false;
+	void findNeighbors() {
+		thisCollider.enabled = false;
 		Collider[] hitColliders = Physics.OverlapSphere(transform.position, 1.0f);
-		gameObject.GetComponent<Collider>().enabled = true;
-		int activeNeighbors = 0;
-		foreach(Collider neighbor in hitColliders){
-			ConwayTile otherTile = neighbor.GetComponent<ConwayTile>();
-			if(otherTile.isOn == true) 
-				activeNeighbors++;
+		thisCollider.enabled = true;
+		foreach(Collider collider in hitColliders){
+			neighbors.Add(collider.GetComponent<ConwayTile> ());
 		}
-
-		CheckRules (activeNeighbors);
-
 	}
 
-	void CheckRules(int activeNeighbors){
+	void checkAllColliders() {
+		activeNeighbors = 0;
+		foreach (ConwayTile neighbor in neighbors) {
+			if (neighbor.isOn == true)
+				activeNeighbors++;
+		}
+	}
+
+	void CheckRules(){
 		if (isOn == true) {
 			if (activeNeighbors <= 1 || activeNeighbors >= 4) {
-				changeCellState (false);
+				changeTileState (false);
 			}
 		} else {
 			if (activeNeighbors == 3)
-				changeCellState (true);
+				changeTileState (true);
 		}
 	}
-
 }
